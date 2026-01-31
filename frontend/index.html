@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoML Studio - Train & Predict</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-content">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+        <span class="logo-text">AutoML Studio</span>
+      </div>
+      <nav class="nav">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#train" class="nav-link">Train</a>
+        <a href="#predict" class="nav-link">Predict</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">Powered by Machine Learning</div>
+      <h1 class="hero-title">Train ML Models<br><span class="gradient-text">Without Writing Code</span></h1>
+      <p class="hero-description">Upload your dataset, select your target, and let our AutoML engine do the rest. Get production-ready models in minutes.</p>
+      <div class="hero-buttons">
+        <a href="#train" class="btn btn-primary">Start Training</a>
+        <a href="#predict" class="btn btn-secondary">Make Predictions</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-value">5+</div>
+          <div class="stat-label">ML Algorithms</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">Auto</div>
+          <div class="stat-label">Feature Engineering</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">Fast</div>
+          <div class="stat-label">Model Training</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2 class="section-title">Why Choose AutoML Studio?</h2>
+      <p class="section-description">Everything you need to build powerful ML models without the complexity</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+              <path d="M16 13H8"/>
+              <path d="M16 17H8"/>
+              <path d="M10 9H8"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">CSV Upload</h3>
+          <p class="feature-description">Simply upload your CSV file and we'll automatically detect columns and data types.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06-.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Auto Detection</h3>
+          <p class="feature-description">Automatically detects whether your problem is classification or regression.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20V10"/>
+              <path d="M18 20V4"/>
+              <path d="M6 20v-4"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Model Selection</h3>
+          <p class="feature-description">Tests multiple algorithms and selects the best performing model for your data.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <path d="M22 4L12 14.01l-3-3"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Instant Predictions</h3>
+          <p class="feature-description">Use your trained model to make predictions on new data instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Train Section -->
+  <section id="train" class="train-section">
+    <div class="container">
+      <h2 class="section-title">Train Your Model</h2>
+      <p class="section-description">Upload a CSV dataset and specify the target column to train your model</p>
+      
+      <div class="card">
+        <form id="trainForm" class="form">
+          <div class="upload-area" id="uploadArea">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <p class="upload-text">Drag and drop your CSV file here, or <span class="upload-link">browse</span></p>
+            <p class="upload-hint">Supports .csv files up to 50MB</p>
+            <input type="file" id="csvFile" accept=".csv" hidden>
+          </div>
+          <div id="fileInfo" class="file-info hidden">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+            </svg>
+            <span id="fileName"></span>
+            <button type="button" id="removeFile" class="remove-btn">&times;</button>
+          </div>
+
+          <div id="columnPreview" class="column-preview hidden">
+            <label class="label">Detected Columns:</label>
+            <div id="columnList" class="column-list"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="targetColumn" class="label">Target Column</label>
+            <input type="text" id="targetColumn" class="input" placeholder="e.g., price, label, target" required>
+            <p class="input-hint">The column name you want to predict (must match exactly)</p>
+          </div>
+
+          <button type="submit" id="trainBtn" class="btn btn-primary btn-full">
+            <span class="btn-text">Train Model</span>
+            <span class="btn-loader hidden">
+              <svg class="spinner" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/>
+                <path d="M4 12a8 8 0 018-8" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+              </svg>
+              Training...
+            </span>
+          </button>
+        </form>
+
+        <!-- CHANGE: Removed inline style="display: none;" - let CSS handle visibility via hidden class -->
+        <div id="trainResult" class="result hidden">
+          <div class="result-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <path d="M22 4L12 14.01l-3-3"/>
+            </svg>
+            <h3>Training Complete!</h3>
+          </div>
+          <div id="trainResultContent" class="result-content">
+            <div class="result-grid">
+              <div class="result-card">
+                <span class="result-label">Problem Type</span>
+                <span id="resultProblemType" class="result-value">-</span>
+              </div>
+              <div class="result-card">
+                <span class="result-label">Best Model</span>
+                <span id="resultBestModel" class="result-value">-</span>
+              </div>
+              <div class="result-card">
+                <span class="result-label">Score</span>
+                <span id="resultScore" class="result-value">-</span>
+              </div>
+            </div>
+            <div class="hyperparams-section">
+              <h4>Best Hyperparameters</h4>
+              <pre id="resultHyperparams" class="code-block">-</pre>
+            </div>
+          </div>
+        </div>
+
+        <div id="trainError" class="error hidden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+          <p id="trainErrorText"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Predict Section -->
+  <section id="predict" class="predict-section">
+    <div class="container">
+      <h2 class="section-title">Make Predictions</h2>
+      <p class="section-description">Use your trained model to predict on new data</p>
+      
+      <div class="card">
+        <form id="predictForm" class="form">
+          <div class="form-group">
+            <label for="predictData" class="label">Input Data (JSON)</label>
+            <textarea id="predictData" class="textarea" rows="6" placeholder='{"feature1": 10, "feature2": "A", "feature3": 5.5}' required></textarea>
+            <p class="input-hint">Enter a single JSON object with your feature values (not an array)</p>
+          </div>
+
+          <button type="submit" id="predictBtn" class="btn btn-primary btn-full">
+            <span class="btn-text">Get Prediction</span>
+            <span class="btn-loader hidden">
+              <svg class="spinner" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/>
+                <path d="M4 12a8 8 0 018-8" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+              </svg>
+              Predicting...
+            </span>
+          </button>
+        </form>
+
+        <div id="predictResult" class="result hidden">
+          <div class="result-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <path d="M22 4L12 14.01l-3-3"/>
+            </svg>
+            <h3>Prediction Ready!</h3>
+          </div>
+          <div id="predictResultContent" class="result-content">
+            <div class="prediction-display">
+              <span class="prediction-label">Predicted Value:</span>
+              <span id="predictionValue" class="prediction-value">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="predictError" class="error hidden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+          <p id="predictErrorText"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 AutoML Studio. Built for seamless machine learning.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
