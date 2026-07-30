@@ -4,6 +4,7 @@ import os
 import joblib
 import json
 import warnings
+from pandas.api import types as ptypes
 
 from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold, KFold, cross_val_score
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, PolynomialFeatures
@@ -25,26 +26,34 @@ def detect_problem_type(y):
     """
     Detects whether the problem is classification or regression.
     """
-    if y.dtype == "object" or y.dtype.name == "category":
+    # Categorical/object/boolean types are classification
+    if ptypes.is_categorical_dtype(y) or ptypes.is_object_dtype(y):
         print(f"[AutoML] Detected classification (categorical target)")
         return "classification"
-    
-    if y.dtype == "bool":
+
+    if ptypes.is_bool_dtype(y):
         print(f"[AutoML] Detected classification (boolean target)")
         return "classification"
-    
-    n_unique = y.nunique()
-    n_total = len(y)
-    unique_ratio = n_unique / n_total
-    
-    is_integer = y.dtype in ["int64", "int32"] or (y.dtype == "float64" and y.apply(lambda x: x == int(x)).all())
-    
-    if is_integer and n_unique <= 10 and unique_ratio < 0.5:
-        print(f"[AutoML] Detected classification (integer target with {n_unique} unique values)")
-        return "classification"
-    
-    print(f"[AutoML] Detected regression (numeric target with {n_unique} unique values, ratio: {unique_ratio:.2f})")
-    return "regression"
+
+    # Work with non-missing values for uniqueness checks
+    y_nonnull = y.dropna()
+    n_unique = y_nonnull.nunique()
+    n_total = len(y_nonnull)
+    unique_ratio = (n_unique / n_total) if n_total > 0 else 0
+
+    # Integer-like small-cardinality numeric targets are often classification
+    if (ptypes.is_integer_dtype(y) or (ptypes.is_float_dtype(y) and y_nonnull.apply(lambda x: float(x).is_integer()).all())):
+        if n_unique <= 10 and unique_ratio < 0.5:
+            print(f"[AutoML] Detected classification (integer-like target with {n_unique} unique values)")
+            return "classification"
+
+    # Default: numeric -> regression, else classification
+    if ptypes.is_numeric_dtype(y):
+        print(f"[AutoML] Detected regression (numeric target with {n_unique} unique values, ratio: {unique_ratio:.2f})")
+        return "regression"
+
+    print(f"[AutoML] Fallback to classification for target with dtype {y.dtype}")
+    return "classification"
 
 
 def build_preprocessor(X):
@@ -122,6 +131,26 @@ def get_models(problem_type, n_samples):
                 KNeighborsClassifier(),
                 {"model__n_neighbors": knn_neighbors, "model__weights": ["uniform", "distance"]}
             )
+        # Optional: XGBoost and LightGBM (added if available)
+        try:
+            import xgboost as xgb  # type: ignore
+            print("[AutoML] XGBoost available — adding to model candidates")
+            models["XGBoost"] = (
+                xgb.XGBClassifier(use_label_encoder=False, eval_metric='logloss', n_jobs=-1, random_state=42),
+                {"model__n_estimators": [50, 100], "model__max_depth": [3, 5], "model__learning_rate": [0.1]}
+            )
+        except Exception:
+            print("[AutoML] XGBoost not available — skipping")
+
+        try:
+            import lightgbm as lgb  # type: ignore
+            print("[AutoML] LightGBM available — adding to model candidates")
+            models["LightGBM"] = (
+                lgb.LGBMClassifier(random_state=42, n_jobs=-1),
+                {"model__n_estimators": [50, 100], "model__num_leaves": [31, 63], "model__learning_rate": [0.1]}
+            )
+        except Exception:
+            print("[AutoML] LightGBM not available — skipping")
     else:
         models = {
             "LinearRegression": (
@@ -147,6 +176,26 @@ def get_models(problem_type, n_samples):
                 Pipeline([("poly", PolynomialFeatures(include_bias=False)), ("lr", LinearRegression())]),
                 {"model__poly__degree": [2, 3]}
             )
+        # Optional: XGBoost and LightGBM regressors
+        try:
+            import xgboost as xgb  # type: ignore
+            print("[AutoML] XGBoost (regressor) available — adding to model candidates")
+            models["XGBoost"] = (
+                xgb.XGBRegressor(n_jobs=-1, random_state=42),
+                {"model__n_estimators": [50, 100], "model__max_depth": [3, 5], "model__learning_rate": [0.1]}
+            )
+        except Exception:
+            print("[AutoML] XGBoost regressor not available — skipping")
+
+        try:
+            import lightgbm as lgb  # type: ignore
+            print("[AutoML] LightGBM (regressor) available — adding to model candidates")
+            models["LightGBM"] = (
+                lgb.LGBMRegressor(random_state=42, n_jobs=-1),
+                {"model__n_estimators": [50, 100], "model__num_leaves": [31, 63], "model__learning_rate": [0.1]}
+            )
+        except Exception:
+            print("[AutoML] LightGBM regressor not available — skipping")
     
     return models
 
@@ -253,22 +302,23 @@ def run_automl(csv_path, target_column, model_path="artifacts/user_model.pkl"):
         from sklearn.metrics import r2_score
         y_pred = best_model.predict(X_test)
         test_score = r2_score(y_test, y_pred) if len(y_test) > 1 else 0.0
-        display_score = abs(best_score)
+        display_score = best_score
     
+    # Ensure values are JSON serializable
     model_info = {
         "problem_type": str(problem_type),
         "best_model": str(best_model_name) if best_model_name else "Unknown",
-        "best_score": float(display_score),
-        "test_score": float(test_score),
+        "best_score": float(display_score) if np.isfinite(display_score) else None,
+        "test_score": float(test_score) if test_score is not None else None,
         "best_hyperparameters": best_params if best_params else {},
         "dataset_size": int(n_samples),
-        "scoring_metric": "accuracy" if problem_type == "classification" else "R² (test set)"
+        "scoring_metric": scoring
     }
     
     print(f"[AutoML] Returning model_info: {model_info}")
     
     info_path = os.path.join(os.path.dirname(model_path), "model_info.json")
     with open(info_path, "w") as f:
-        json.dump(model_info, f, indent=4)
+        json.dump(model_info, f, indent=4, default=str)
     
     return model_info

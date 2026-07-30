@@ -5,6 +5,14 @@ import joblib
 import pandas as pd
 from fastapi.middleware.cors import CORSMiddleware
 
+import sys
+from pathlib import Path
+
+# Ensure project root is on sys.path so `src` can be imported when running from the api/ folder
+PROJECT_ROOT = str(Path(__file__).resolve().parents[1])
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 from src.automl import run_automl
 
 
